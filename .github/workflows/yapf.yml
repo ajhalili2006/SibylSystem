@@ -1,0 +1,24 @@
+name: Format Python code
+on: 
+  push: 
+    branches: [master]
+  pull_request:
+    branches: [master]
+jobs:
+  Autoyapf:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Run YAPF
+        uses: Accipiter7/yapf-action@master
+      - name: Create a new GitHub PR
+        uses: peter-evans/create-pull-request@master
+        with:
+          commit-message: [YAPF] Formatted Python files automatically
+          committer: Recap Time Bot <RecapTimeBot@noreply.github.com>
+          title: [github-ci/yapf] Automated PR after running YAPF
+          body: This is an automated code formatting pull request crafted after running the YAPF.
+          labels: Code Formatting
+          reviewers: TsunayoshiSawada, Dragsama
+          assignees: AndreiJirohHaliliDev2006
+          branch: autofix
