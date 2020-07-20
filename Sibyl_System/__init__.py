@@ -7,7 +7,6 @@ from motor import motor_asyncio
 import re
 import asyncio
 
-
 ENV = bool(os.environ.get('ENV', False))
 if ENV:
     API_ID_KEY = int(os.environ.get('API_ID_KEY', None))
@@ -47,12 +46,10 @@ session = aiohttp.ClientSession()
 MONGO_CLIENT = motor_asyncio.AsyncIOMotorClient(MONGO_DB_URL)
 
 from .client_class import SibylClient
-System = SibylClient(
-    StringSession(STRING_SESSION),
-    API_ID_KEY,
-    API_HASH_KEY)
+System = SibylClient(StringSession(STRING_SESSION), API_ID_KEY, API_HASH_KEY)
 
 collection = MONGO_CLIENT['Sibyl']['Main']
+
 
 async def make_collections() -> str:
     if await collection.count_documents({'_id': 1}, limit=1) == 0:
@@ -73,14 +70,21 @@ async def make_collections() -> str:
         await collection.insert_one(dictw)
     return ""
 
-if __name__ == '__main__':
-   loop = asyncio.get_event_loop()
-   loop.run_until_complete(make_collections())
-   System.processing = 0
-   System.processed = 0
 
-def system_cmd(pattern=None, allow_sibyl=True,
-               allow_enforcer=False, allow_inspectors = False, allow_slash=True, force_reply = False, **args):
+if __name__ == '__main__':
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(make_collections())
+    System.processing = 0
+    System.processed = 0
+
+
+def system_cmd(pattern=None,
+               allow_sibyl=True,
+               allow_enforcer=False,
+               allow_inspectors=False,
+               allow_slash=True,
+               force_reply=False,
+               **args):
     if pattern and allow_slash:
         args["pattern"] = re.compile(r"[\?\.!/]" + pattern)
     else:

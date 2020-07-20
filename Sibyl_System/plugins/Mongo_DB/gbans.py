@@ -2,11 +2,13 @@ from Sibyl_System import MONGO_CLIENT
 
 db = MONGO_CLIENT['Sibyl']['Main']
 
+
 async def get_gbans() -> dict:
     json = await db.find_one({'_id': 3})
     return json
 
-async def get_gban(user:int) :
+
+async def get_gban(user: int):
     gbans = await get_gbans()
     if user not in gbans['victim']:
         return False
@@ -18,9 +20,13 @@ async def get_gban(user:int) :
         user_data['enforcer'] = gbans['gbanners'][place]
         user_data['proof_id'] = gbans['proof_id'][place]
         return user_data
-        
 
-async def update_gban(victim:int, reason:str=None, proof_id:int=None, enforcer:int=None, add:bool=True) -> bool:
+
+async def update_gban(victim: int,
+                      reason: str = None,
+                      proof_id: int = None,
+                      enforcer: int = None,
+                      add: bool = True) -> bool:
     gbans_dict = await get_gbans()
     if victim not in gbans_dict['victim'] and not add:
         return False

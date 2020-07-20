@@ -1,5 +1,6 @@
 from Sibyl_System import MONGO_CLIENT
 
+
 async def get_blacklist():
     db = MONGO_CLIENT['Sibyl']['Main']
     json = await db.find_one({'_id': 1})

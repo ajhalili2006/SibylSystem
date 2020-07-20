@@ -4,26 +4,27 @@ db = MONGO_CLIENT['Sibyl']['Main']
 upd = {}
 owo = {}
 
-async def update_wlc_blacklist(word, add = False):
-     db = MONGO_CLIENT['Sibyl']['Main']
-     bl = await db.find_one({'_id': 2})
-     current = bl['blacklisted_wlc']
-     if add:
+
+async def update_wlc_blacklist(word, add=False):
+    db = MONGO_CLIENT['Sibyl']['Main']
+    bl = await db.find_one({'_id': 2})
+    current = bl['blacklisted_wlc']
+    if add:
         if word in current:
-             return False
+            return False
         current.append(word)
-     else:
+    else:
         if word in current:
-          current.remove(word)
+            current.remove(word)
         else:
-          return False
-     upd['blacklisted_wlc'] = current
-     owo['$set'] = upd
-     await db.update_one(await db.find_one({'_id': 2}), owo)
-     return True
+            return False
+    upd['blacklisted_wlc'] = current
+    owo['$set'] = upd
+    await db.update_one(await db.find_one({'_id': 2}), owo)
+    return True
 
 
 async def get_wlc_bl():
-        db = MONGO_CLIENT['Sibyl']['Main']
-        json = await db.find_one({"_id": 2})
-        return json.get("blacklisted_wlc", [])
+    db = MONGO_CLIENT['Sibyl']['Main']
+    json = await db.find_one({"_id": 2})
+    return json.get("blacklisted_wlc", [])
